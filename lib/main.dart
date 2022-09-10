@@ -53,7 +53,13 @@ class _MyHomePageState extends State<MyHomePage> {
         name: "Google",
         email: "gmail.com",
         views: 0,
-        img: "as",
+        img: "assets/WindowsXP.jpeg",
+        isHearted: false),
+    User(
+        name: "Google",
+        email: "gmail.com",
+        views: 0,
+        img: "assets/WindowsXP.jpeg",
         isHearted: false),
   ];
 
@@ -66,9 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-        body: Center(
-      // child: Card(user: users[0]))
-      child: Image(image: AssetImage("assets/WindowsXP.jpeg")),
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 20),
+      // child: Card(user: users[0])
+      child: ListView(
+        children: users
+            .map(
+              (user) => Card(user: user),
+            )
+            .toList(),
+      ),
     ));
   }
 }
@@ -79,13 +92,30 @@ class Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: ListTile(
-      leading: CircleAvatar(child: Text(user.name.substring(0, 1))),
-      title: Text(user.name),
-      subtitle: Text(user.email),
-      trailing: Text(user.views.toString()),
-    ));
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Material(
+        elevation: 10.0,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20)
+        ),
+        child: Column(children: [
+          Image(
+            image: AssetImage(user.img),
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              backgroundColor: const Color(0xFF445962),
+              child: Text(user.name.substring(0, 1)),
+            ),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            trailing: Text(user.views.toString()),
+          )
+        ]),
+      ),
+    );
   }
 }
 
