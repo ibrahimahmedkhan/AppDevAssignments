@@ -60,7 +60,9 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
+  List<User> users = [
+    User(name: "Google", email: "gmail.com", views: 0, img:"as", isHearted: false),
+  ];
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -70,46 +72,38 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+        child: Card(user: users[0]))
     );
   }
+}
+
+class Card extends StatelessWidget {
+  const Card({Key? key, required this.user}) : super(key: key);
+  final User user;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: ListTile(
+      leading: CircleAvatar(child:Text(user.name.substring(0,1))),
+      title: Text(user.name),
+      subtitle: Text(user.email),
+      trailing: Text(user.views.toString()),
+    ));
+  }
+}
+
+class User {
+  final String name;
+  final String email;
+  final int views;
+  final String img;
+  final bool isHearted;
+
+  User(
+      {required this.name,
+      required this.email,
+      required this.views,
+      required this.img,
+      required this.isHearted});
 }
