@@ -51,15 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
   List<User> users = [
     User(
         name: "Google",
-        email: "gmail.com",
-        views: 0,
+        email: "gmaild@gmail.com",
+        views: 2000,
         img: "assets/WindowsXP.jpeg",
         isHearted: false),
     User(
-        name: "Google",
-        email: "gmail.com",
-        views: 0,
+        name: "Facebook",
+        email: "facebook@gmail.com",
+        views: 150,
         img: "assets/waterBaptism.jpeg",
+        isHearted: false),
+    User(
+        name: "Apple",
+        email: "apple@gmail.com",
+        views: 0,
+        img: "assets/PrettyMountains.jpeg",
         isHearted: false),
   ];
 
@@ -73,8 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         body: Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      // child: Card(user: users[0])
+          padding: const EdgeInsets.all(10),
       child: ListView(
         children: users
             .map(
@@ -93,7 +98,7 @@ class Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Material(
         elevation: 8.0,
         shape:  const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -110,6 +115,7 @@ class Card extends StatelessWidget {
             ListTile(
               
               leading: CircleAvatar(
+                radius: 20,
                 backgroundColor: const Color(0xFF445962),
                 child: Text(user.name.substring(0, 1)),
               ),
@@ -121,7 +127,7 @@ class Card extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Icon(Icons.favorite),
+                      const Icon(Icons.favorite),
                       Row(
                         children: [
                           const Icon(Icons.remove_red_eye_rounded),
