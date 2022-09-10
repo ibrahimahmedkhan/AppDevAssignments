@@ -97,6 +97,8 @@ class Card extends StatelessWidget {
       child: Material(
         elevation: 10.0,
         borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(100),
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20)
         ),
@@ -111,7 +113,21 @@ class Card extends StatelessWidget {
             ),
             title: Text(user.name),
             subtitle: Text(user.email),
-            trailing: Text(user.views.toString()),
+            // trailing: Text(user.views.toString()),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Column(
+                  children: [
+                    Icon(Icons.favorite),
+                    Row(children: [
+                      Icon(Icons.remove_red_eye_rounded),
+                      Text(user.views.toString())
+                    ],)
+                  ],
+                ),
+              ],
+            ),
           )
         ]),
       ),
