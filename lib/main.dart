@@ -60,9 +60,16 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
   List<User> users = [
-    User(name: "Google", email: "gmail.com", views: 0, img:"as", isHearted: false),
+    User(
+        name: "Google",
+        email: "gmail.com",
+        views: 0,
+        img: "as",
+        isHearted: false),
   ];
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -72,20 +79,22 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: Center(
-        child: Card(user: users[0]))
-    );
+        body: Center(
+      // child: Card(user: users[0]))
+      child: Image(image: AssetImage("assets/WindowsXP.jpeg")),
+    ));
   }
 }
 
 class Card extends StatelessWidget {
   const Card({Key? key, required this.user}) : super(key: key);
   final User user;
+
   @override
   Widget build(BuildContext context) {
     return Container(
         child: ListTile(
-      leading: CircleAvatar(child:Text(user.name.substring(0,1))),
+      leading: CircleAvatar(child: Text(user.name.substring(0, 1))),
       title: Text(user.name),
       subtitle: Text(user.email),
       trailing: Text(user.views.toString()),
