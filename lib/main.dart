@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blueGrey,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -54,19 +54,19 @@ class _MyHomePageState extends State<MyHomePage> {
         email: "gmaild@gmail.com",
         views: 2000,
         img: "assets/WindowsXP.jpeg",
-        isHearted: false),
+        isFavourited: false),
     User(
         name: "Facebook",
         email: "facebook@gmail.com",
         views: 150,
         img: "assets/waterBaptism.jpeg",
-        isHearted: false),
+        isFavourited: false),
     User(
         name: "Apple",
         email: "apple@gmail.com",
         views: 0,
         img: "assets/PrettyMountains.jpeg",
-        isHearted: false),
+        isFavourited: false),
   ];
 
   @override
@@ -79,29 +79,50 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         body: Container(
-          padding: const EdgeInsets.all(10),
-      child: ListView(
-        children: users
-            .map(
-              (user) => Card(user: user),
+          padding: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            top: 40,
+            bottom: 10,
+          ),
+          child: ListView(
+            children: users
+                .map(
+                  (user) =>
+                  Card(
+                      user: user,
+                      onTap: () {
+                        setState(() {
+                          user.isFavourited =
+                          !user.isFavourited;
+                        });
+                      }
+                  ),
             )
-            .toList(),
-      ),
-    ));
+                .toList(),
+          ),
+        ));
   }
 }
 
-class Card extends StatelessWidget {
-  const Card({Key? key, required this.user}) : super(key: key);
+class Card extends StatefulWidget {
+  const Card({Key? key, required this.user, required this.onTap})
+      : super(key: key);
   final User user;
+  final VoidCallback onTap;
 
+  @override
+  State<Card> createState() => _CardState();
+}
+
+class _CardState extends State<Card> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
       child: Material(
         elevation: 8.0,
-        shape:  const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: ClipPath(
           clipper: const ShapeBorderClipper(
               shape: BeveledRectangleBorder(
@@ -110,28 +131,36 @@ class Card extends StatelessWidget {
                       topRight: Radius.circular(5)))),
           child: Column(children: [
             Image(
-              image: AssetImage(user.img),
+              image: AssetImage(widget.user.img),
             ),
             ListTile(
-              
               leading: CircleAvatar(
                 radius: 20,
                 backgroundColor: const Color(0xFF445962),
-                child: Text(user.name.substring(0, 1)),
+                child: Text(widget.user.name.substring(0, 1)),
               ),
-              title: Text(user.name),
-              subtitle: Text(user.email),
+              title: Text(widget.user.name),
+              subtitle: Text(widget.user.email),
               // trailing: Text(user.views.toString()),
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Icon(Icons.favorite),
+                      InkWell(
+                        onTap: widget.onTap,
+                        child: Icon(
+                          Icons.favorite,
+                          color: widget.user.isFavourited
+                              ? Colors.red
+                              : Colors.grey,
+                        ),
+                      ),
                       Row(
                         children: [
                           const Icon(Icons.remove_red_eye_rounded),
-                          Text(user.views.toString())
+                          Text(widget.user.views.toString())
                         ],
                       )
                     ],
@@ -151,12 +180,11 @@ class User {
   final String email;
   final int views;
   final String img;
-  final bool isHearted;
+  bool isFavourited;
 
-  User(
-      {required this.name,
-      required this.email,
-      required this.views,
-      required this.img,
-      required this.isHearted});
+  User({required this.name,
+    required this.email,
+    required this.views,
+    required this.img,
+    required this.isFavourited});
 }
