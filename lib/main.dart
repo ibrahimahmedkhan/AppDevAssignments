@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
         name: "Google",
         email: "gmail.com",
         views: 0,
-        img: "assets/WindowsXP.jpeg",
+        img: "assets/waterBaptism.jpeg",
         isHearted: false),
   ];
 
@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
         body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20),
       // child: Card(user: users[0])
       child: ListView(
         children: users
@@ -95,41 +95,46 @@ class Card extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Material(
-        elevation: 10.0,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(40),
-          topRight: Radius.circular(100),
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20)
+        elevation: 8.0,
+        shape:  const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: ClipPath(
+          clipper: const ShapeBorderClipper(
+              shape: BeveledRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(5),
+                      topRight: Radius.circular(5)))),
+          child: Column(children: [
+            Image(
+              image: AssetImage(user.img),
+            ),
+            ListTile(
+              
+              leading: CircleAvatar(
+                backgroundColor: const Color(0xFF445962),
+                child: Text(user.name.substring(0, 1)),
+              ),
+              title: Text(user.name),
+              subtitle: Text(user.email),
+              // trailing: Text(user.views.toString()),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    children: [
+                      Icon(Icons.favorite),
+                      Row(
+                        children: [
+                          const Icon(Icons.remove_red_eye_rounded),
+                          Text(user.views.toString())
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ]),
         ),
-        child: Column(children: [
-          Image(
-            image: AssetImage(user.img),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: const Color(0xFF445962),
-              child: Text(user.name.substring(0, 1)),
-            ),
-            title: Text(user.name),
-            subtitle: Text(user.email),
-            // trailing: Text(user.views.toString()),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  children: [
-                    Icon(Icons.favorite),
-                    Row(children: [
-                      Icon(Icons.remove_red_eye_rounded),
-                      Text(user.views.toString())
-                    ],)
-                  ],
-                ),
-              ],
-            ),
-          )
-        ]),
       ),
     );
   }
