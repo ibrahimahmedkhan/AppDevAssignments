@@ -34,20 +34,17 @@ class _MyHomePageState extends State<MyHomePage> {
         name: "Google",
         email: "gmaild@gmail.com",
         views: 2000,
-        img: "assets/WindowsXP.jpeg",
-        isFavourited: false),
+        img: "assets/WindowsXP.jpeg"),
     User(
         name: "Facebook",
         email: "facebook@gmail.com",
         views: 150,
-        img: "assets/waterBaptism.jpeg",
-        isFavourited: false),
+        img: "assets/waterBaptism.jpeg"),
     User(
         name: "Apple",
         email: "apple@gmail.com",
         views: 0,
-        img: "assets/PrettyMountains.jpeg",
-        isFavourited: false),
+        img: "assets/PrettyMountains.jpeg"),
   ];
 
   @override
@@ -68,8 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       user: user,
                       onTap: () {
                         setState(() {
-                          user.isFavourited =
-                          !user.isFavourited;
+                          user.isFavourited = !user.isFavourited;
                         });
                       }
                   ),
@@ -81,8 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class Card extends StatefulWidget {
-  const Card({Key? key, required this.user, required this.onTap})
-      : super(key: key);
+  const Card({Key? key, required this.user, required this.onTap}) : super(key: key);
   final User user;
   final VoidCallback onTap;
 
@@ -94,25 +89,23 @@ class _CardState extends State<Card> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+      padding: const EdgeInsets.all(5),
       child: Material(
         elevation: 8.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: ClipPath(
           clipper: const ShapeBorderClipper(
               shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(5),
-                      topRight: Radius.circular(5)))),
-          child: Column(children: [
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(5)))),
+          child: Column(
+              children: [
             Image(
               image: AssetImage(widget.user.img),
             ),
             ListTile(
               leading: CircleAvatar(
-                radius: 20,
                 backgroundColor: const Color(0xFF445962),
-                child: Text(widget.user.name.substring(0, 1)),
+                child: Text(widget.user.name[0]),
               ),
               title: Text(widget.user.name),
               subtitle: Text(widget.user.email),
@@ -127,9 +120,7 @@ class _CardState extends State<Card> {
                         onTap: widget.onTap,
                         child: Icon(
                           Icons.favorite,
-                          color: widget.user.isFavourited
-                              ? Colors.red
-                              : Colors.grey,
+                          color: widget.user.isFavourited ? Colors.red : Colors.grey,
                         ),
                       ),
                       Row(
@@ -155,11 +146,10 @@ class User {
   final String email;
   final int views;
   final String img;
-  bool isFavourited;
+  bool isFavourited = false;
 
   User({required this.name,
     required this.email,
     required this.views,
-    required this.img,
-    required this.isFavourited});
+    required this.img});
 }
