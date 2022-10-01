@@ -1,16 +1,13 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import 'dart:ffi';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-
 import 'cart.dart';
-
 import 'package:badges/badges.dart';
 
 void main() {
+  // products.add(Product(name: "cap", id: id))
   runApp(const MyApp());
 }
 
@@ -19,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Welcome to Flutter',
       home: MyHome(),
     );
@@ -50,7 +47,11 @@ class _MyHomeState extends State<MyHome> {
       body: ListView(
           children: products
               .map(
-                (product) => ProductTile(product: product, isClicked: () {}),
+                (product) => ProductTile(
+                    product: product,
+                    onPress: () {
+                      setState(() {});
+                    }),
               )
               .toList()),
     );
@@ -67,19 +68,17 @@ class ShoppingCartButton extends StatefulWidget {
 }
 
 class _ShoppingCartButtonState extends State<ShoppingCartButton> {
-  int _items = 0;
-
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => widget.onPress,
+      onPressed: () => widget.onPress(),
       iconSize: 30,
       icon: Badge(
         badgeContent: Text(products
             .where((product) => product.quantity > 0)
             .length
             .toString()),
-        child: Icon(Icons.shopping_cart),
+        child: const Icon(Icons.shopping_cart),
       ),
     );
   }
@@ -87,9 +86,9 @@ class _ShoppingCartButtonState extends State<ShoppingCartButton> {
 
 class ProductTile extends StatefulWidget {
   final Product product;
-  final VoidCallback isClicked;
+  final VoidCallback onPress;
 
-  const ProductTile({Key? key, required this.product, required this.isClicked})
+  const ProductTile({Key? key, required this.product, required this.onPress})
       : super(key: key);
 
   @override
@@ -108,26 +107,27 @@ class _ProductTileState extends State<ProductTile> {
           ? IconButton(
               onPressed: () {
                 widget.product.addQuantity();
-                setState(() {});
-                print(widget.product);
+                widget.onPress();
               },
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
             )
           : Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   onPressed: () {
-                    setState(() {});
                     widget.product.subtractQuantity();
+                    widget.product.quantity == 0
+                        ? widget.onPress()
+                        : setState(() {});
                   },
                   icon: const Icon(Icons.remove),
                 ),
                 Text(widget.product.quantity.toString()),
                 IconButton(
                   onPressed: () {
-                    setState(() {});
                     widget.product.addQuantity();
+                    setState(() {});
                   },
                   icon: const Icon(Icons.add),
                 ),
@@ -137,12 +137,8 @@ class _ProductTileState extends State<ProductTile> {
   }
 }
 
-List<Product> products = [
-  Product(name: "Cap", id: 1),
-  Product(name: "Shirt", id: 2),
-  Product(name: "Shoe", id: 3),
-  Product(name: "Tie", id: 4)
-];
+List<Product> products = [];
+
 
 class Product {
   final String name;
