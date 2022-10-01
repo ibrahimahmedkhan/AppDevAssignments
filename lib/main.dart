@@ -1,6 +1,7 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -16,10 +17,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
+        floatingActionButton: const Icon(Icons.shopping_cart),
         body: ListView(
             children: products
                 .map(
-                  (product) => ProductTile(),
+                  (product) => ProductTile(
+                    product: product,
+                  ),
                 )
                 .toList()),
       ),
@@ -27,27 +31,50 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ProductTile extends StatelessWidget {
-  Product product
-  const ProductTile({
-    Key? key,
-  }) : super(key: key);
+class ProductTile extends StatefulWidget {
+  final Product product;
 
+  const ProductTile({Key? key, required this.product}) : super(key: key);
+
+  @override
+  State<ProductTile> createState() => _ProductTileState();
+}
+
+class _ProductTileState extends State<ProductTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(),
-      title: Text(product.name),
-      trailing: product.isAdded == false
+      leading: CircleAvatar(
+        child: Text("P${widget.product.id}"),
+      ),
+      title: Text(widget.product.name),
+      trailing: widget.product.quantity == 0
           ? IconButton(
               onPressed: () {
-                product.isAdded = true;
+                widget.product.addQuantity();
+                setState(() {});
+                print(widget.product);
               },
               icon: Icon(Icons.add),
             )
           : Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.remove),
+                IconButton(
+                  onPressed: () {
+                    setState(() {});
+                    widget.product.subtractQuantity();
+                  },
+                  icon: const Icon(Icons.remove),
+                ),
+                Text(widget.product.quantity.toString()),
+                IconButton(
+                  onPressed: () {
+                    setState(() {});
+                    widget.product.addQuantity();
+                  },
+                  icon: const Icon(Icons.add),
+                ),
               ],
             ),
     );
@@ -64,8 +91,15 @@ List<Product> products = [
 class Product {
   final String name;
   final int id;
-  bool isAdded = false;
   int quantity = 0;
+
+  addQuantity() {
+    quantity++;
+  }
+
+  subtractQuantity() {
+    quantity = max(quantity - 1, 0);
+  }
 
   Product({required this.name, required this.id});
 }
