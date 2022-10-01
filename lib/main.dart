@@ -1,9 +1,14 @@
 // Copyright 2018 The Flutter team. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+
+import 'cart.dart';
+
+import 'package:badges/badges.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,16 +21,65 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Welcome to Flutter',
-      home: Scaffold(
-        floatingActionButton: const Icon(Icons.shopping_cart),
-        body: ListView(
-            children: products
-                .map(
-                  (product) => ProductTile(
-                    product: product,
-                  ),
-                )
-                .toList()),
+      home: MyHome(),
+    );
+  }
+}
+
+class MyHome extends StatefulWidget {
+  const MyHome({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: ShoppingCartButton(
+        onPress: () async {
+          await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => Cart(products: products),
+          ));
+          setState(() {});
+        },
+      ),
+      body: ListView(
+          children: products
+              .map(
+                (product) => ProductTile(product: product, isClicked: () {}),
+              )
+              .toList()),
+    );
+  }
+}
+
+class ShoppingCartButton extends StatefulWidget {
+  final VoidCallback onPress;
+
+  const ShoppingCartButton({Key? key, required this.onPress}) : super(key: key);
+
+  @override
+  State<ShoppingCartButton> createState() => _ShoppingCartButtonState();
+}
+
+class _ShoppingCartButtonState extends State<ShoppingCartButton> {
+  int _items = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => widget.onPress,
+      iconSize: 30,
+      icon: Badge(
+        badgeContent: Text(products
+            .where((product) => product.quantity > 0)
+            .length
+            .toString()),
+        child: Icon(Icons.shopping_cart),
       ),
     );
   }
@@ -33,8 +87,10 @@ class MyApp extends StatelessWidget {
 
 class ProductTile extends StatefulWidget {
   final Product product;
+  final VoidCallback isClicked;
 
-  const ProductTile({Key? key, required this.product}) : super(key: key);
+  const ProductTile({Key? key, required this.product, required this.isClicked})
+      : super(key: key);
 
   @override
   State<ProductTile> createState() => _ProductTileState();
