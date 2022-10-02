@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 import 'dart:math';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'cart.dart';
 import 'package:badges/badges.dart';
 
 void main() {
-  // products.add(Product(name: "cap", id: id))
+  products.forEachIndexed((index, product) {product.id = index;});
   runApp(const MyApp());
 }
 
@@ -36,6 +37,10 @@ class _MyHomeState extends State<MyHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Products"),
+        centerTitle: true,
+      ),
       floatingActionButton: ShoppingCartButton(
         onPress: () async {
           await Navigator.of(context).push(MaterialPageRoute(
@@ -88,7 +93,10 @@ class ProductTile extends StatefulWidget {
   final Product product;
   final VoidCallback onPress;
 
-  const ProductTile({Key? key, required this.product, required this.onPress})
+  const ProductTile(
+      {Key? key,
+      required this.product,
+      required this.onPress})
       : super(key: key);
 
   @override
@@ -102,7 +110,7 @@ class _ProductTileState extends State<ProductTile> {
       leading: CircleAvatar(
         child: Text("P${widget.product.id}"),
       ),
-      title: Text(widget.product.name),
+      title: Text("${widget.product.name} ${widget.product.id}"),
       trailing: widget.product.quantity == 0
           ? IconButton(
               onPressed: () {
@@ -137,21 +145,21 @@ class _ProductTileState extends State<ProductTile> {
   }
 }
 
-List<Product> products = [];
-
+List<Product> products = [
+  Product(name: "Cap"),
+  Product(name: "Shirt"),
+  Product(name: "Shoe"),
+  Product(name: "Tie")
+];
 
 class Product {
   final String name;
-  final int id;
+  int id = 0;
   int quantity = 0;
 
-  addQuantity() {
-    quantity++;
-  }
+  addQuantity() {quantity++;}
 
-  subtractQuantity() {
-    quantity = max(quantity - 1, 0);
-  }
+  subtractQuantity() {quantity = max(quantity - 1, 0);}
 
-  Product({required this.name, required this.id});
+  Product({required this.name});
 }
