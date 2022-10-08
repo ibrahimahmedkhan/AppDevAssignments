@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   badges: ^2.0.3
+  collection: ^1.16.0
 
 
   # The following adds the Cupertino Icons font to your application.
